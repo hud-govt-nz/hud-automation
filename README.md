@@ -11,7 +11,7 @@ Tools for managing a [{targets}](https://docs.ropensci.org/targets/) run:
 ## Installation
 You'll need `devtools::install_github` to install the package:
 ```R
-devtools::install_github("hud-govt-nz/hud-automation")
+devtools::install_github("hud-govt-nz/hud-automate")
 ```
 
 
