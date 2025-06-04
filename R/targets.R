@@ -6,15 +6,14 @@
 #' @export
 get_target_report <- function() {
     report <-
-        targets::tar_progress() %>%
-        left_join(
+        dplyr::left_join(
+            targets::tar_progress(),
             targets::tar_meta(),
             by = "name",
-            relationship = "one-to-one") %>%
-        mutate(minutes = case_when(
-            progress == "completed" ~ round(seconds / 60, 1) %>% as.character(),
-            TRUE ~ "-"))
+            relationship = "one-to-one")
 
+    report$minutes <- format(round(report$seconds / 60, 1))
+    report$minutes[report$progress != "completed"] <- "-"
     return(report)
 }
 

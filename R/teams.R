@@ -40,7 +40,7 @@ send_teams_message <- function(payload, channel_name = "Bots Health Check", team
     res <- httr::POST(
         url = stringr::str_glue("{API_URL}/teams/{team_id}/channels/{channel_id}/messages"),
         body = jsonlite::toJSON(payload, auto_unbox = TRUE),
-        httr::add_headers(Authorization = str_glue("Bearer {token}")),
+        httr::add_headers(Authorization = stringr::str_glue("Bearer {token}")),
         httr::content_type_json())
 
     if (httr::status_code(res) %in% c(200, 201)) {
