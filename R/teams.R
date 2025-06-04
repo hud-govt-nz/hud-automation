@@ -96,9 +96,9 @@ make_column_items <- function(targ_df, col_name) {
         lapply(targ_df[[col_name]], function(x) {
             list(
                 type = "TextBlock",
-                text = str_replace(x, "NA", "-"),
+                text = stringr::str_replace(x, "NA", "-"),
                 spacing = "none",
-                color = case_when(
+                color = dplyr::case_when(
                     x == "errored" ~ "attention",
                     x == "skipped" ~ "accent",
                     x == "completed" ~ "good",
