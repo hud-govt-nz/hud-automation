@@ -126,7 +126,7 @@ store_run_data <- function(run_name, project_name, container_url, upload_targets
 #' @export
 run_targets <- function(run_name, project_name, container_url, upload_targets = c(), invalidate = FALSE, forced = FALSE) {
     message("Starting run '", run_name, "'...")
-    if (forced) {
+    if (invalidate) {
         message("\033[33;1m*** THIS WILL OVERWRITE THE OLD DATA, YOU HAVE 5 SECONDS TO ABORT ***\033[0m")
         Sys.sleep(5)
         message("\033[33mInvalidating old data...\033[0m")
