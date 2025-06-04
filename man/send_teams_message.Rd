@@ -4,39 +4,21 @@
 \alias{send_teams_message}
 \title{Send Teams message}
 \usage{
-send_teams_message(
-  payload,
-  channel_name = "Bots Health Check",
-  team_name = "Insights"
-)
+send_teams_message(message_text, ...)
 }
 \arguments{
-\item{payload}{JSON-like structure for the message body, see https://learn.microsoft.com/en-us/graph/api/chatmessage-post}
+\item{message}{Message to send}
 
 \item{channel_name}{Name of the channel to post on}
 
 \item{team_name}{Name of the team the channel belongs to}
 }
 \description{
-Sends a Teams message to the specified channel using the Graph API. See
-https://learn.microsoft.com/en-us/graph/api/chatmessage-post for details on
-the API.
+Sends a simple Teams message to the specified channel using the Graph API.
+See https://learn.microsoft.com/en-us/graph/api/chatmessage-post for details
+on the API.
 }
 \details{
 Note that this relies on a user-level authentication. i.e. This can only
 post a message where you can post a message.
-
-Also, the payload needs to be in JSON, but we are generating JSON-like
-structures in R (using list() to describe dictionaries and arrays) and then
-converting it into a JSON string. The content also needs to follow very
-specific rules. See make_card_payload() to understand how to attach an
-AdaptiveCard to a message, and use the WYSIWYG designer to understand how to
-create an AdaptiveCard: https://adaptivecards.microsoft.com/designer.html
-
-If you run into trouble, test with a
-JSON string that is known to work and step up from there, e.g.:
-'{"body": {"content": "Hello World"}}'
-
-In R JSON-like structure, this is:
-list(body = list(content = "Hello World"))
 }

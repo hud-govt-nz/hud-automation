@@ -1,32 +1,32 @@
-#' Send Teams message
+#' Send Teams payload
 #'
-#' Sends a Teams message to the specified channel using the Graph API. See
+#' Sends a Teams payload to the specified channel using the Graph API. See
 #' https://learn.microsoft.com/en-us/graph/api/chatmessage-post for details on
 #' the API.
 #'
 #' Note that this relies on a user-level authentication. i.e. This can only
 #' post a message where you can post a message.
 #'
-#' Also, the payload needs to be in JSON, but we are generating JSON-like
-#' structures in R (using list() to describe dictionaries and arrays) and then
-#' converting it into a JSON string. The content also needs to follow very
-#' specific rules. See make_card_payload() to understand how to attach an
-#' AdaptiveCard to a message, and use the WYSIWYG designer to understand how to
-#' create an AdaptiveCard: https://adaptivecards.microsoft.com/designer.html
+#' The payload needs to be in JSON, but we are generating JSON-like structures
+#' in R (using list() to describe dictionaries and arrays) and then converting
+#' it into a JSON string. The content also needs to follow very specific rules.
+#' See make_card_payload() to understand how to attach an AdaptiveCard to a
+#' message, and use the WYSIWYG designer to understand how to create an
+#' AdaptiveCard: https://adaptivecards.microsoft.com/designer.html
 #' 
-#' If you run into trouble, test with a
-#' JSON string that is known to work and step up from there, e.g.:
+#' If you run into trouble, test with a JSON string that is known to work and
+#' step up from there, e.g.:
 #' '{"body": {"content": "Hello World"}}'
 #' 
 #' In R JSON-like structure, this is:
 #' list(body = list(content = "Hello World"))
 #'
-#' @name send_teams_message
+#' @name send_teams
 #' @param payload JSON-like structure for the message body, see https://learn.microsoft.com/en-us/graph/api/chatmessage-post
 #' @param channel_name Name of the channel to post on
 #' @param team_name Name of the team the channel belongs to
 #' @export
-send_teams_message <- function(payload, channel_name = "Bots Health Check", team_name = "Insights") {
+send_teams <- function(payload, channel_name = "Bots Health Check", team_name = "Insights") {
     API_URL <- "https://graph.microsoft.com/v1.0"
 
     # Get channel details
@@ -48,6 +48,25 @@ send_teams_message <- function(payload, channel_name = "Bots Health Check", team
     } else {
         message("\033[31;1mFailed to send message: ", httr::content(res, "text"), "\033[0m")
     }
+}
+
+#' Send Teams message
+#'
+#' Sends a simple Teams message to the specified channel using the Graph API.
+#' See https://learn.microsoft.com/en-us/graph/api/chatmessage-post for details
+#' on the API.
+#'
+#' Note that this relies on a user-level authentication. i.e. This can only
+#' post a message where you can post a message.
+#'
+#' @name send_teams_message
+#' @param message Message to send
+#' @param channel_name Name of the channel to post on
+#' @param team_name Name of the team the channel belongs to
+#' @export
+send_teams_message <- function(message_text, ...) {
+    payload <- list(body = list(content = message_text))
+    send_teams(payload, ...)
 }
 
 #' make_column_items

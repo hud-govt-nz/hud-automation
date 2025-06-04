@@ -153,7 +153,7 @@ run_targets <- function(run_name, project_name, container_url, upload_targets = 
         store_run_data(run_name, project_name, container_url, upload_targets, forced)
         # Send card
         payload <- make_project_card(run_name, project_name)
-        send_teams_message(payload)
+        send_teams(payload)
         message("\033[1;32mDone.\033[0m")
     }
 }
