@@ -4,10 +4,10 @@
 \alias{make_column_items}
 \title{make_column_items}
 \usage{
-make_column_items(x, col_name)
+make_column_items(targ_df, col_name)
 }
 \arguments{
-\item{x}{Dataframe to generate the column from}
+\item{targ_df}{Dataframe to generate the column from}
 
 \item{col_name}{Name of the channel to post on}
 

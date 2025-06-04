@@ -56,10 +56,10 @@ send_teams_message <- function(payload, channel_name = "Bots Health Check", team
 #' of a card creator.
 #' 
 #' @name make_column_items
-#' @param x Dataframe to generate the column from
+#' @param targ_df Dataframe to generate the column from
 #' @param col_name Name of the channel to post on
 #' @param team_name Name of the team the channel belongs to
-make_column_items <- function(x, col_name) {
+make_column_items <- function(targ_df, col_name) {
     header <- list(
         type = "TextBlock",
         text = col_name,
@@ -67,7 +67,7 @@ make_column_items <- function(x, col_name) {
 
     column_items <- c(
         list(header),
-        lapply(report[[col_name]], function(x) {
+        lapply(targ_df[[col_name]], function(x) {
             list(
                 type = "TextBlock",
                 text = str_replace(x, "NA", "-"),
