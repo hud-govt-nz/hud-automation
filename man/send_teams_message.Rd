@@ -9,6 +9,8 @@ send_teams_message(message_text, ...)
 \arguments{
 \item{message}{Message to send}
 
+\item{pings}{Ping users in this message using their emails (case sensitive) as identifiers}
+
 \item{channel_name}{Name of the channel to post on}
 
 \item{team_name}{Name of the team the channel belongs to}

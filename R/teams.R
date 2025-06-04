@@ -23,10 +23,11 @@
 #'
 #' @name send_teams
 #' @param payload JSON-like structure for the message body, see https://learn.microsoft.com/en-us/graph/api/chatmessage-post
+#' @param pings Ping users in this message using their emails (case sensitive) as identifiers
 #' @param channel_name Name of the channel to post on
 #' @param team_name Name of the team the channel belongs to
 #' @export
-send_teams <- function(payload, channel_name = "Bots Health Check", team_name = "Insights") {
+send_teams <- function(payload, pings = NULL, channel_name = "Bots Health Check", team_name = "Insights") {
     API_URL <- "https://graph.microsoft.com/v1.0"
 
     # Get channel details
@@ -35,6 +36,11 @@ send_teams <- function(payload, channel_name = "Bots Health Check", team_name = 
     team_id <- curr_channel$team_id
     channel_id <- curr_channel$properties$id
     token <- curr_channel$token$credentials$access_token
+
+    # Add pings
+    if (!is.null(pings)) {
+        payload <- add_pings(payload, pings, curr_team)
+    }
 
     # Send
     res <- httr::POST(
@@ -61,6 +67,7 @@ send_teams <- function(payload, channel_name = "Bots Health Check", team_name = 
 #'
 #' @name send_teams_message
 #' @param message Message to send
+#' @param pings Ping users in this message using their emails (case sensitive) as identifiers
 #' @param channel_name Name of the channel to post on
 #' @param team_name Name of the team the channel belongs to
 #' @export
@@ -136,6 +143,49 @@ make_card_payload <- function(card_items) {
             )
         )
     )
+
+    return(payload)
+}
+
+#' Add mentions
+#' 
+#' Add people to be mentioned
+#' 
+#' @name add_pings
+#' @param payload JSON-like structure for the message body, see https://learn.microsoft.com/en-us/graph/api/chatmessage-post
+#' @param pings List of emails of Teams users to be alerted
+add_pings <- function(payload, pings, curr_team) {
+    # Resolve user IDs
+    payload$mentions <-
+        lapply(seq(1, length(pings)), function(i) {
+            tryCatch({
+                curr_member <- curr_team$get_member(email = pings[i])
+            }, error = function(e) {
+                message("\033[31;1mCan not find user '", pings[i], "', check the email address (case sensitive)\033[0m")
+                stop(e)
+            })
+
+            props <- curr_member$properties
+            mentioned_user <- list(
+                displayName = props$displayName,
+                id = props$userId
+            )
+            out <- list(
+                id = i,
+                mentionText = props$displayName,
+                mentioned = list(user = mentioned_user)
+            )
+        })
+
+    # Add mention string
+    mention_html <-
+        lapply(payload$mentions, function(m) {
+            stringr::str_glue("<at id=\"{m$id}\">{m$mentionText}</at>")
+        })
+    payload$body$contentType <- "html"
+    payload$body$content <- stringr::str_glue(
+        "<p>Ping {paste(mention_html, sep = ', ')}</p><br>",
+        "<p>{payload$body$content}</p>")
 
     return(payload)
 }

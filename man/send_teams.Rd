@@ -6,12 +6,15 @@
 \usage{
 send_teams(
   payload,
+  pings = NULL,
   channel_name = "Bots Health Check",
   team_name = "Insights"
 )
 }
 \arguments{
 \item{payload}{JSON-like structure for the message body, see https://learn.microsoft.com/en-us/graph/api/chatmessage-post}
+
+\item{pings}{Ping users in this message using their emails (case sensitive) as identifiers}
 
 \item{channel_name}{Name of the channel to post on}
 
