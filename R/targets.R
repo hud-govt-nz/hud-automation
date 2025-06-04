@@ -88,7 +88,7 @@ make_project_card <- function(run_name, project_name) {
 #' @param forced Overwrite blob version
 #' @export
 store_run_data <- function(run_name, project_name, container_url, upload_targets = c(), forced = FALSE) {
-    blob_path <- str_glue("{project_name}/{run_name}")
+    blob_path <- str_glue("{project_name}/outputs/{run_name}")
 
     for (tn in upload_targets) {
         message(str_glue("Uploading '{tn}'..."))
