@@ -88,26 +88,26 @@ make_project_card <- function(run_name, project_name) {
 #' @param forced Overwrite blob version
 #' @export
 store_run_data <- function(run_name, project_name, container_url, upload_targets = c(), forced = FALSE) {
-    blob_path <- str_glue("{project_name}/outputs/{run_name}")
+    blob_path <- stringr::str_glue("{project_name}/outputs/{run_name}")
 
     for (tn in upload_targets) {
-        message(str_glue("Uploading '{tn}'..."))
+        message(stringr::str_glue("Uploading '{tn}'..."))
         hud.keep::store_data(
-            tar_read_raw(tn),
-            str_glue("{blob_path}/{tn}.rds"),
+            targets::tar_read_raw(tn),
+            stringr::str_glue("{blob_path}/{tn}.rds"),
             container_url, forced = forced)
     }
 
     message("Uploading validation files...")
     hud.keep::store_folder(
         "validation",
-        str_glue("{blob_path}/validation"),
+        stringr::str_glue("{blob_path}/validation"),
         container_url, forced = forced)
 
     message("Uploading metadata...")
     hud.keep::store_data(
         get_target_report(),
-        str_glue("{blob_path}/run_report.rds"),
+        stringr::str_glue("{blob_path}/run_report.rds"),
         container_url, forced = forced)
 }
 
